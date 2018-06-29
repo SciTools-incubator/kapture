@@ -71,7 +71,7 @@ We can take a look at this with:
 
     $ python -m kapture.blockview -l log.txt
 
-    ![screenshot](docs/screenshot.png)
+![screenshot](docs/screenshot.png)
 
 Unlike tools like pyflame, we visualise the blocks descending from the top.
 Therefore the very top box is the invocation, and the lowest blocks are the deepest calls in the stack.
