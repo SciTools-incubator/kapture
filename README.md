@@ -9,7 +9,7 @@ investigate bottlenecks and hot-spots.
 ## Installation
 
 Kapture currently needs to run inside the installation of Python you wish to profile.
-It is written in pure python and depends only on the standard library.
+It is written in pure python and depends only on the standard library (mostly pdb).
 The visualisation component of kapture depends on matplotlib and numpy.
 
 Kapture can be pip installed with:
