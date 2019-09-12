@@ -18,6 +18,7 @@ _Frame = namedtuple('_Frame', 'path line_no func_name line module')
 class IntPdb(pdb.Pdb):
     def __init__(self, completekey='tab', stdin=None, stdout=None, skip=None):
         pdb.Pdb.__init__(self, completekey, stdin, stdout, skip)
+        self.nosigint = True
         self.allow_kbdint = False
         signal.signal(signal.SIGINT, self.sigint_handler)
 
@@ -62,9 +63,6 @@ class IntPdb(pdb.Pdb):
                     log.write('            {!r},\n'.format(logframe))
             log.write('           ])\n')
 
-    def do_continue(self, arg):
-        self.set_continue()
-        return 1
 
     def _cmdloop(self):
         while True:
