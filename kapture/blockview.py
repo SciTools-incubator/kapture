@@ -38,7 +38,9 @@ def parse_code(log, nlines=10):
 
 def read_log(log_path):
     my_locals = {}
-    exec(open(log_path).read(), globals(), my_locals)
+    with open(log_path) as log_file:
+        log = log_file.read()
+    exec(log, globals(), my_locals)
     return my_locals['log']
 
 
