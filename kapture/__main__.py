@@ -28,12 +28,12 @@ def main(command_args):
             time.sleep(interval)
             i += 1
     finally:
-        print 'Killing'
+        print('Killing')
         process.kill()
 
 
 def usage():
-    print 'usage: python -m kapture -h'
+    print('usage: python -m kapture -h')
     print('       python -m kapture [-l LOG]'
           ' (-c command | -m module-name | script) [args]')
     exit()

@@ -38,7 +38,7 @@ def parse_code(log, nlines=10):
 
 def read_log(log_path):
     my_locals = {}
-    execfile(log_path, globals(), my_locals)
+    exec(open(log_path).read(), globals(), my_locals)
     return my_locals['log']
 
 
@@ -117,8 +117,8 @@ class CallDiagram(object):
 
     def _onclick(self, event, debug=False):
         if debug:
-            print 'button=%d, x=%d, y=%d, xdata=%f, ydata=%f' % (
-                event.button, event.x, event.y, event.xdata, event.ydata)
+            print('button=%d, x=%d, y=%d, xdata=%f, ydata=%f' % (
+                event.button, event.x, event.y, event.xdata, event.ydata))
 
         #pop-up style
         props = dict(boxstyle='square', facecolor='white')
