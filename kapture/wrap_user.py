@@ -63,7 +63,6 @@ class IntPdb(pdb.Pdb):
                     log.write('            {!r},\n'.format(logframe))
             log.write('           ])\n')
 
-
     def _cmdloop(self):
         while True:
             try:
@@ -201,7 +200,7 @@ if __name__ == '__main__':
         command = sys.argv[2]
         sys.argv = ['-c'] + sys.argv[3:]
         exec(command, {'__doc__': None, '__name__': '__main__',
-                         '__package__': None})
+                       '__package__': None})
     elif sys.argv[1] == '-m':
         if len(sys.argv) < 3:
             usage()
