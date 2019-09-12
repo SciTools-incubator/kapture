@@ -200,7 +200,7 @@ if __name__ == '__main__':
             usage()
         command = sys.argv[2]
         sys.argv = ['-c'] + sys.argv[3:]
-        exec(command in {'__doc__': None, '__name__': '__main__',
+        exec(command, {'__doc__': None, '__name__': '__main__',
                          '__package__': None})
     elif sys.argv[1] == '-m':
         if len(sys.argv) < 3:
