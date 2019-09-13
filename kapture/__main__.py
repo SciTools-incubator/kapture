@@ -49,7 +49,7 @@ if __name__ == '__main__':
         LOG_PATH = sys.argv[2]
         sys.argv = sys.argv[:1] + sys.argv[3:]
 
-    if sys.argv[1] == '-c' or sys.argv[1] == '-m' and len(sys.argv) < 3:
+    if (sys.argv[1] == '-c' or sys.argv[1] == '-m') and len(sys.argv) < 3:
         usage()
 
     main(sys.argv[1:])
