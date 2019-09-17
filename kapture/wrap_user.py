@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import linecache
 import os.path
 import pdb
@@ -16,15 +18,19 @@ _Frame = namedtuple('_Frame', 'path line_no func_name line module')
 class IntPdb(pdb.Pdb):
     def __init__(self, completekey='tab', stdin=None, stdout=None, skip=None):
         pdb.Pdb.__init__(self, completekey, stdin, stdout, skip)
+        self.nosigint = True
         self.allow_kbdint = False
         signal.signal(signal.SIGINT, self.sigint_handler)
 
     def sigint_handler(self, signum, frame):
         if self.allow_kbdint:
             raise KeyboardInterrupt
-        print >>self.stdout, "\nProgram interrupted. (Use 'cont' to resume)."
+        self.message("\nProgram interrupted. (Use 'cont' to resume).")
         self.set_step()
         self.set_trace(frame)
+
+    def message(self, msg):
+        print(msg, file=self.stdout)
 
     def logging_sigint_handler(self, signum, frame):
         stack, i = self.get_stack(sys._getframe().f_back, None)
@@ -169,7 +175,7 @@ def tb_log():
 
 
 def usage():
-    print 'usage: wrap_user.py -h'
+    print('usage: wrap_user.py -h')
     print('       wrap_user.py [-l LOG] (-c command | -m module-name | script)'
           ' [args]')
     exit()
@@ -193,8 +199,8 @@ if __name__ == '__main__':
             usage()
         command = sys.argv[2]
         sys.argv = ['-c'] + sys.argv[3:]
-        exec command in {'__doc__': None, '__name__': '__main__',
-                         '__package__': None}
+        exec(command, {'__doc__': None, '__name__': '__main__',
+                       '__package__': None})
     elif sys.argv[1] == '-m':
         if len(sys.argv) < 3:
             usage()
