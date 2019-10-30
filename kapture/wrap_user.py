@@ -6,9 +6,11 @@ import pdb
 import runpy
 import signal
 import sys
+import time
 
 
 LOG_PATH = 'log.txt'
+PERIOD = 1
 
 
 from collections import namedtuple
@@ -21,6 +23,7 @@ class IntPdb(pdb.Pdb):
         self.nosigint = True
         self.allow_kbdint = False
         signal.signal(signal.SIGINT, self.sigint_handler)
+        self.last_interupt_time = None
 
     def sigint_handler(self, signum, frame):
         if self.allow_kbdint:
@@ -33,6 +36,13 @@ class IntPdb(pdb.Pdb):
         print(msg, file=self.stdout)
 
     def logging_sigint_handler(self, signum, frame):
+        t = time.time()
+        if self.last_interupt_time == None:
+            interupts = 1
+        else:
+            interupts = int((t - self.last_interupt_time + 0.5)/PERIOD)
+            interupts = max(interupts, 1)
+        self.last_interupt_time = time.time()
         stack, i = self.get_stack(sys._getframe().f_back, None)
         #print >>self.stdout, "------\n", stack, "------\n"
         if not os.path.exists(LOG_PATH):
@@ -43,25 +53,26 @@ class IntPdb(pdb.Pdb):
                 log.write('log = []\n')
 
         with open(LOG_PATH, 'a') as log:
-            log.write('log.append([\n')
-            for frame, line_no in stack:
-                code = frame.f_code
-                path = code.co_filename
-                func_name = code.co_name
-                linecache.checkcache(path)
-                line = linecache.getline(path, line_no, frame.f_globals)
-                if '__module__' in frame.f_globals:
-                    module = frame.f_globals['__module__']
-                elif '__name__' in frame.f_globals:
-                    module = frame.f_globals['__name__']
-                else:
-                    module = None
-                # Remove any frames from debugging module.
-                if module not in ['pdb', 'bdb', 'intpdb']:
-                    logframe = _Frame(path, line_no, func_name, line.strip(),
-                                      module)
-                    log.write('            {!r},\n'.format(logframe))
-            log.write('           ])\n')
+            for _ in range(interupts):
+                log.write('log.append([\n')
+                for frame, line_no in stack:
+                    code = frame.f_code
+                    path = code.co_filename
+                    func_name = code.co_name
+                    linecache.checkcache(path)
+                    line = linecache.getline(path, line_no, frame.f_globals)
+                    if '__module__' in frame.f_globals:
+                        module = frame.f_globals['__module__']
+                    elif '__name__' in frame.f_globals:
+                        module = frame.f_globals['__name__']
+                    else:
+                        module = None
+                    # Remove any frames from debugging module.
+                    if module not in ['pdb', 'bdb', 'intpdb']:
+                        logframe = _Frame(path, line_no, func_name, line.strip(),
+                                          module)
+                        log.write('            {!r},\n'.format(logframe))
+                log.write('           ])\n')
 
     def _cmdloop(self):
         while True:
