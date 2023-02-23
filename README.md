@@ -12,10 +12,6 @@ Kapture currently needs to run inside the installation of Python you wish to pro
 It is written in pure python and depends only on the standard library (mostly pdb).
 The visualisation component of kapture depends on matplotlib and numpy.
 
-Kapture can be pip installed with:
-
-    pip install kapture
-
 Kapture can be installed from the source directory with:
 
     pip install .
