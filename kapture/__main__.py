@@ -24,7 +24,7 @@ def main(command_args):
             process.send_signal(signal.SIGINT)
             # Uniformly jitter the samples
             time.sleep(PERIOD - interval)
-            interval = random.uniform(0, PERIOD)
+            interval = random.uniform(0.5*PERIOD, PERIOD)
             time.sleep(interval)
             i += 1
     finally:
